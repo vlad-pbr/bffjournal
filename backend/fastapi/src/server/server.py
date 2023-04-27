@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from uvicorn import run
 from bffmodels import render
-from bffmodels.translators.languages import TypeScriptTranslator
+from bffmodels.languages import TypeScript
 
 from .models import *
 
@@ -10,7 +10,7 @@ app = FastAPI()
 
 @app.get("/models")
 def models():
-    return render(TypeScriptTranslator)
+    return render(TypeScript)
 
 
 def serve():
