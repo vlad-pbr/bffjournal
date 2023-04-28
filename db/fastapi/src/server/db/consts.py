@@ -1,0 +1,1 @@
+DB_FILE: str = "db.json"

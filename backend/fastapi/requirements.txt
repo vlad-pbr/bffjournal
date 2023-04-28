@@ -1,3 +1,4 @@
 fastapi==0.92.0
 uvicorn==0.20.0
-bffmodels
+requests==2.25.1
+bffmodels==0.1.0
