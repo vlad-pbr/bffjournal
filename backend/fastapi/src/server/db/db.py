@@ -1,16 +1,28 @@
-import requests
-from typing import List, Dict
+from typing import List, Dict, TypeVar, Type
+from dataclasses import asdict
 
-from .consts import DB_HOST
+from ..models import Model
 
-
-def _format_db_url(prefix: str) -> str:
-    return f"{DB_HOST}/{prefix}"
-
-
-def get(prefix: str) -> List:
-    return requests.get(_format_db_url(prefix)).json()
+M = TypeVar('M', bound=Model)
+_db: Dict[Type[M], List[Dict]] = {}
 
 
-def set(prefix: str, data: Dict) -> None:
-    requests.post(_format_db_url(prefix), data=data)
+def get(type: Type[M]) -> List[M]:
+    return [type(**item) for item in _db.get(type, [])]
+
+
+def set(data: M) -> None:
+    _db[data.__class__] = get(data.__class__) + [asdict(data)]
+
+
+def delete(data: M) -> bool:
+    db_data = get(data.__class__)
+
+    try:
+        db_data.remove(data)
+    except ValueError:
+        return False
+
+    _db[data.__class__] = db_data
+
+    return True

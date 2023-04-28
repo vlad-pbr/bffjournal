@@ -3,7 +3,7 @@ from uvicorn import run
 from bffmodels import render
 from bffmodels.languages import TypeScript
 
-from .users import validate_user
+from .users import validate_user, create_user, delete_user
 from .models import *
 
 app = FastAPI()
@@ -13,7 +13,7 @@ app = FastAPI()
 
 
 @app.get("/models")
-def models():
+def _list_models():
     return render(TypeScript)
 
 
@@ -21,17 +21,19 @@ def models():
 
 
 @app.post("/users")
-def create_user(user: User):
+def _create_user(user: User):
     
-    if not validate_user(user):
-        raise HTTPException(400)
+    if not create_user(user):
+        raise HTTPException(400, detail=f"Username '{user.username}' is already taken.")
 
 
 @app.delete("/users")
-def delete_user(user: User):
+def _delete_user(user: User):
     
     if not validate_user(user):
-        raise HTTPException(401)
+        raise HTTPException(401, detail="Invalid credentials.")
+
+    delete_user(user)
 
 
 # Log API

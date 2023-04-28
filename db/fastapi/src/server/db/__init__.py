@@ -1,1 +1,0 @@
-from .data import get, set

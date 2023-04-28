@@ -1,1 +1,1 @@
-from .db import get, set
+from .db import get, set, delete
