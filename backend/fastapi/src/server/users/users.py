@@ -2,12 +2,7 @@ from ..models import User
 from .. import db
 
 
-def validate_user(user: User, username: str = None) -> bool:
-
-    # if username is provided - validate
-    if username is not None and username != user.username:
-        return False
-
+def validate_user(user: User) -> bool:
     return user in db.get(User)
 
 
