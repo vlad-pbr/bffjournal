@@ -24,7 +24,7 @@ export class UserDialogComponent {
   });
   tabs: Tab[] = [ Tab.LOGIN, Tab.REGISTER ]
   message: string = ""
-  currentTab: Tab = Tab.LOGIN
+  currentTab: Tab = this.tabs[0]
   busy: boolean = false
 
   constructor(
@@ -33,7 +33,9 @@ export class UserDialogComponent {
     private userService: UserService) {}
 
   onNoClick(): void {
-    this.dialogRef.close()
+    if (!this.busy) {
+      this.dialogRef.close()
+    }
   }
 
   handleTabChange(e: MatTabChangeEvent): void {
