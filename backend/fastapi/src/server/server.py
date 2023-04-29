@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Header
 from fastapi.responses import PlainTextResponse
+from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run
 from bffmodels import render
 from bffmodels.languages import TypeScript
@@ -10,6 +11,7 @@ from .logs import validate_log_request, list_logs, create_log, delete_log, delet
 from .models import *
 
 app = FastAPI()
+app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:4200"], allow_methods=["*"])
 
 
 # Models API
