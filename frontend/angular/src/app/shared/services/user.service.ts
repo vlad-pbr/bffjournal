@@ -12,6 +12,7 @@ const AUTH_URI: string = "/auth"
 export class UserService {
   user?: User = undefined
   token?: Token = undefined
+  loggedIn: boolean = false
 
   constructor(private serverService: ServerService) { }
 
@@ -22,6 +23,7 @@ export class UserService {
       next: (token) => {
         this.user = user
         this.token = token
+        this.loggedIn = true
       }
     })
 
@@ -35,5 +37,6 @@ export class UserService {
   logout(): void {
     this.user = undefined
     this.token = undefined
+    this.loggedIn = false
   }
 }

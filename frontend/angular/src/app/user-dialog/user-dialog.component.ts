@@ -46,6 +46,14 @@ export class UserDialogComponent {
     return Object.entries(this.userForm.value).map(([_, value]) => value !== "").indexOf(false) === -1
   }
 
+  isLoggedIn(): boolean {
+    return this.userService.loggedIn
+  }
+
+  getUsername(): string {
+    return this.userService.loggedIn ? this.userService.user!.username : ""
+  }
+
   submit(): void {
 
     this.message = ""
