@@ -1,6 +1,6 @@
 from typing import List
 
-from ..models import User, Log, LogRequest
+from ..models import User, Log
 from .. import db
 
 
