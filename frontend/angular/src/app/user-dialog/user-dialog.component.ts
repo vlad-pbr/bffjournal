@@ -40,6 +40,10 @@ export class UserDialogComponent {
     this.currentTab = e.tab.textLabel as Tab
   }
 
+  isSubmittable(): boolean {
+    return Object.entries(this.userForm.value).map(([_, value]) => value !== "").indexOf(false) === -1
+  }
+
   submit(): void {
 
     this.message = ""

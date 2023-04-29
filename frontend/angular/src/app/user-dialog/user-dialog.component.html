@@ -13,6 +13,6 @@
     </mat-form-field>
 </form>
 
-<button disabled="{{ busy }}" mat-stroked-button (click)="submit()">{{ currentTab }}</button>
+<button disabled="{{ busy || !isSubmittable() }}" mat-stroked-button (click)="submit()">{{ currentTab }}</button>
 <div>{{ message }}</div>
   
