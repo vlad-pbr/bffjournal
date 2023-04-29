@@ -4,6 +4,7 @@ from uvicorn import run
 from bffmodels import render
 from bffmodels.languages import TypeScript
 
+from .auth import renew_token
 from .users import validate_user, create_user, delete_user
 from .logs import validate_log_request, list_logs, create_log, delete_log, delete_user_logs
 from .models import *
@@ -19,6 +20,18 @@ def _list_models():
     return render(TypeScript)
 
 
+# Authentication API
+
+
+@app.post("/auth")
+def _authenticate_user(user: User):
+
+    if not validate_user(user):
+        raise HTTPException(401, detail="Invalid credentials.")
+
+    return renew_token(user)
+
+
 # User API
 
 
@@ -26,7 +39,7 @@ def _list_models():
 def _create_user(user: User):
     
     if not create_user(user):
-        raise HTTPException(400, detail=f"Username '{user.username}' is already taken.")
+        raise HTTPException(400, detail="Username is already taken.")
 
 
 @app.delete("/users")
