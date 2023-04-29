@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
+from fastapi.responses import PlainTextResponse
 from uvicorn import run
 from bffmodels import render
 from bffmodels.languages import TypeScript
@@ -13,7 +14,7 @@ app = FastAPI()
 # Models API
 
 
-@app.get("/models")
+@app.get("/models", response_class=PlainTextResponse)
 def _list_models():
     return render(TypeScript)
 
@@ -29,8 +30,10 @@ def _create_user(user: User):
 
 
 @app.delete("/users")
-def _delete_user(user: User):
+def _delete_user(username: str = Header(), password: str = Header()):
     
+    user: User = User(username, password)
+
     if not validate_user(user):
         raise HTTPException(401, detail="Invalid credentials.")
 
@@ -41,9 +44,11 @@ def _delete_user(user: User):
 # Log API
 
 
-@app.put("/logs")
-def _list_logs(user: User):
+@app.get("/logs")
+def _list_logs(username: str = Header(), password: str = Header()):
     
+    user: User = User(username, password)
+
     if not validate_user(user):
         raise HTTPException(401, detail="Invalid credentials.")
 
@@ -51,27 +56,31 @@ def _list_logs(user: User):
 
 
 @app.post("/logs")
-def _create_log(log_request: LogRequest):
+def _create_log(log: Log, username: str = Header(), password: str = Header()):
     
-    if not validate_user(log_request.user):
+    user: User = User(username, password)
+
+    if not validate_user(user):
         raise HTTPException(401, detail="Invalid credentials.")
 
-    if not validate_log_request(log_request):
-        raise HTTPException(400, detail=f"Log request username mismatch: '{log_request.user.username}' != '{log_request.log.username}'.")
+    if not validate_log_request(log, user):
+        raise HTTPException(400, detail="Log request username mismatch.")
 
-    create_log(log_request.log)
+    create_log(log)
 
 
 @app.delete("/logs")
-def _delete_log(log_request: LogRequest):
+def _delete_log(log: Log, username: str = Header(), password: str = Header()):
+
+    user: User = User(username, password)
     
-    if not validate_user(log_request.user):
+    if not validate_user(user):
         raise HTTPException(401, detail="Invalid credentials.")
 
-    if not validate_log_request(log_request):
-        raise HTTPException(400, detail=f"Log request username mismatch: '{log_request.user.username}' != '{log_request.log.username}'.")
+    if not validate_log_request(log, user):
+        raise HTTPException(400, detail="Log request username mismatch.")
 
-    delete_log(log_request.log)
+    delete_log(log)
 
 
 def serve():
