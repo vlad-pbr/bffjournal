@@ -9,11 +9,11 @@ def validate_log_request(log_request: LogRequest) -> bool:
 
 
 def list_logs(user: User) -> List[Log]:
-    return [l for l in db.get(Log) if l.username == user.username]
+    return [l for l in db.list(Log) if l.username == user.username]
 
 
 def create_log(log: Log) -> None:
-    db.set(log)
+    db.create(log)
 
 
 def delete_log(log: Log) -> bool:
