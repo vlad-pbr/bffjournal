@@ -3,7 +3,13 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { UserService } from '../shared/services/user.service';
-import { Error } from '../shared/models/models';
+import { Error, User } from '../shared/models/models';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+
+const enum Tab {
+  LOGIN = "Log-In",
+  REGISTER = "Register"
+}
 
 @Component({
   selector: 'app-user-dialog',
@@ -16,8 +22,10 @@ export class UserDialogComponent {
     username: '',
     password: ''
   });
-
+  tabs: Tab[] = [ Tab.LOGIN, Tab.REGISTER ]
   message: string = ""
+  currentTab: Tab = Tab.LOGIN
+  busy: boolean = false
 
   constructor(
     public dialogRef: MatDialogRef<UserDialogComponent>,
@@ -28,13 +36,30 @@ export class UserDialogComponent {
     this.dialogRef.close()
   }
 
+  handleTabChange(e: MatTabChangeEvent): void {
+    this.currentTab = e.tab.textLabel as Tab
+  }
+
   submit(): void {
 
     this.message = ""
+    this.busy = true
 
-    this.userService.login$(this.userForm.value).subscribe({
-      next: () => { this.dialogRef.close() },
-      error: (e: Error) => { this.message = e.detail }
-    })
+    const handleError = (e: Error) => { this.message = e.detail; this.busy = false }
+    const login = () => {
+      this.userService.login$(this.userForm.value).subscribe({
+        error: handleError,
+        next: () => { this.dialogRef.close() }
+      })
+    }
+
+    if (this.currentTab === Tab.LOGIN) {
+      login()
+    } else if (this.currentTab === Tab.REGISTER) {
+      this.userService.create$(this.userForm.value).subscribe({
+        error: handleError,
+        next: () => { login() }
+      })
+    }
   }
 }
