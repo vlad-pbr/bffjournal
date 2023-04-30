@@ -6,12 +6,11 @@
     </button>
 </mat-toolbar>
 
-<ng-template [ngIf]="!isLoggedIn()" [ngIfElse]="loggedIn">
-    Log in to see your logs!
-</ng-template>
-
-<ng-template #loggedIn>
-    <div class="center-contaner">
+<div class="center-contaner">
+    <ng-template [ngIf]="!isLoggedIn()" [ngIfElse]="loggedIn">
+        <h1 class="center-container-item center-text">Log in to see your logs!</h1>
+    </ng-template>
+    <ng-template #loggedIn>
         <form [formGroup]="logForm" class="center-container-item">
             <mat-form-field class="full-width">
                 <mat-label>What's on your mind?</mat-label>
@@ -27,10 +26,10 @@
             </div>
         </ng-template>
         <ng-template #noLogs>
-            No logs!
+            <h1 class="center-container-item center-text">Write your first log!</h1>
         </ng-template>
-    </div>
-</ng-template>
+    </ng-template>
 
-<div>{{ message }}</div>
+    <div><h2 class="center-container-item center-text error-text">{{ message }}</h2></div>
+</div>
   
