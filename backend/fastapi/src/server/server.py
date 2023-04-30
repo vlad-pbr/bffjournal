@@ -11,10 +11,12 @@ from .logs import validate_log_request, list_logs, create_log, delete_log, delet
 from .models import *
 
 app = FastAPI()
-app.add_middleware(CORSMiddleware,
+app.add_middleware(
+    CORSMiddleware,
     allow_origins=["http://localhost:4200"],
     allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
-    allow_headers=["token"])
+    allow_headers=["token"]
+)
 
 
 # Models API
