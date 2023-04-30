@@ -5,3 +5,32 @@
         <mat-icon>login</mat-icon>
     </button>
 </mat-toolbar>
+
+<ng-template [ngIf]="!isLoggedIn()" [ngIfElse]="loggedIn">
+    Log in to see your logs!
+</ng-template>
+
+<ng-template #loggedIn>
+    <div class="center-contaner">
+        <form [formGroup]="logForm" class="center-container-item">
+            <mat-form-field class="full-width">
+                <mat-label>What's on your mind?</mat-label>
+                <textarea matInput formControlName="message"></textarea>
+                <button disabled="{{ !isValidLog() }}" matSuffix mat-icon-button (click)="createLog()">
+                    <mat-icon>send</mat-icon>
+                </button>
+            </mat-form-field>
+        </form>
+        <ng-template [ngIf]="getLogs().length > 0" [ngIfElse]="noLogs">
+            <div class="center-container-item" *ngFor="let log of getLogs()">
+                <app-log [log]="log"></app-log>
+            </div>
+        </ng-template>
+        <ng-template #noLogs>
+            No logs!
+        </ng-template>
+    </div>
+</ng-template>
+
+<div>{{ message }}</div>
+  

@@ -13,11 +13,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { LogComponent } from './log/log.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserDialogComponent
+    UserDialogComponent,
+    LogComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +34,9 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
-    MatTabsModule
+    MatTabsModule,
+    MatCardModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

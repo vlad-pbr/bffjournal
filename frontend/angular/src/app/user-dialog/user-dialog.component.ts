@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from '../shared/services/user.service';
 import { Error } from '../shared/models/models';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { LogService } from '../shared/services/log.service';
 
 const enum Tab {
   LOGIN = "Log In",
@@ -30,11 +31,12 @@ export class UserDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<UserDialogComponent>,
     private formBuilder: FormBuilder,
-    private userService: UserService) {}
+    private userService: UserService,
+    private logService: LogService) {}
 
   onNoClick(): void {
     if (!this.busy) {
-      this.dialogRef.close()
+      this.dialogRef.close(false)
     }
   }
 
@@ -63,7 +65,8 @@ export class UserDialogComponent {
     this.busy = true
 
     this.userService.logout()
-    this.dialogRef.close()
+    this.logService.clear_logs()
+    this.dialogRef.close(false)
   }
 
   delete(): void {
@@ -83,7 +86,7 @@ export class UserDialogComponent {
     const login = () => {
       this.userService.login$(this.userForm.value).subscribe({
         error: (e: Error) => this.handleError(e),
-        next: () => { this.dialogRef.close() }
+        next: () => { this.dialogRef.close(true) }
       })
     }
 

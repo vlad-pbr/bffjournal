@@ -66,42 +66,43 @@ def _delete_user(token: str = Header()):
 
 
 @app.get("/logs")
-def _list_logs(username: str = Header(), password: str = Header()):
+def _list_logs(token: str = Header()):
     
-    user: User = User(username, password)
+    username = token_to_username(token)
 
-    if not validate_user(user):
+    if username is None:
         raise HTTPException(401, detail="Invalid credentials.")
 
-    return list_logs(user)
+    return list_logs(username)
 
 
 @app.post("/logs")
-def _create_log(log: Log, username: str = Header(), password: str = Header()):
+def _create_log(log: Log, token: str = Header()):
     
-    user: User = User(username, password)
+    username = token_to_username(token)
 
-    if not validate_user(user):
+    if username is None:
         raise HTTPException(401, detail="Invalid credentials.")
 
-    if not validate_log_request(log, user):
+    if not validate_log_request(log, username):
         raise HTTPException(400, detail="Log request username mismatch.")
 
     create_log(log)
 
 
 @app.delete("/logs")
-def _delete_log(log: Log, username: str = Header(), password: str = Header()):
+def _delete_log(log: Log, token: str = Header()):
 
-    user: User = User(username, password)
-    
-    if not validate_user(user):
+    username = token_to_username(token)
+
+    if username is None:
         raise HTTPException(401, detail="Invalid credentials.")
 
-    if not validate_log_request(log, user):
+    if not validate_log_request(log, username):
         raise HTTPException(400, detail="Log request username mismatch.")
 
-    delete_log(log)
+    if not delete_log(log):
+        raise HTTPException(400, detail="Log does not exist.")
 
 
 def serve():

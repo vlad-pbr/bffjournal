@@ -4,8 +4,8 @@ from ..models import User, Log
 from .. import db
 
 
-def validate_log_request(log: Log, user: User) -> bool:
-    return user.username == log.username
+def validate_log_request(log: Log, username: str) -> bool:
+    return username == log.username
 
 
 def list_logs(username: str) -> List[Log]:
