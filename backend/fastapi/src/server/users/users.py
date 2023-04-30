@@ -1,3 +1,5 @@
+from typing import List
+
 from ..models import User
 from .. import db
 
@@ -16,5 +18,11 @@ def create_user(user: User) -> bool:
     return True
 
 
-def delete_user(user: User) -> bool:
-    return db.delete(user)
+def delete_user(username: str) -> bool:
+
+    # find full user object by username
+    user_in_list: List[User] = [u for u in db.list(User) if u.username == username]
+    if not user_in_list:
+        return False
+
+    return db.delete(user_in_list.pop())

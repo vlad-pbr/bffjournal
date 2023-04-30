@@ -5,13 +5,16 @@ from uvicorn import run
 from bffmodels import render
 from bffmodels.languages import TypeScript
 
-from .auth import renew_token
+from .auth import renew_token, token_to_username, revoke_token
 from .users import validate_user, create_user, delete_user
 from .logs import validate_log_request, list_logs, create_log, delete_log, delete_user_logs
 from .models import *
 
 app = FastAPI()
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:4200"], allow_methods=["*"])
+app.add_middleware(CORSMiddleware,
+    allow_origins=["http://localhost:4200"],
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_headers=["token"])
 
 
 # Models API
@@ -45,15 +48,16 @@ def _create_user(user: User):
 
 
 @app.delete("/users")
-def _delete_user(username: str = Header(), password: str = Header()):
+def _delete_user(token: str = Header()):
     
-    user: User = User(username, password)
+    username = token_to_username(token)
 
-    if not validate_user(user):
+    if username is None:
         raise HTTPException(401, detail="Invalid credentials.")
 
-    delete_user_logs(user)
-    delete_user(user)
+    revoke_token(username)
+    delete_user_logs(username)
+    delete_user(username)
 
 
 # Log API

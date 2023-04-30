@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 from random import choice
 from string import ascii_letters
 from datetime import datetime, timedelta
@@ -23,3 +23,21 @@ def renew_token(user: User) -> Token:
     return Token(**_tokens[user.username])
 
 
+def token_to_username(token_value: str) -> Optional[str]: 
+
+    # find token which matches the value
+    token_in_list = [Token(**t) for t in list(_tokens.values()) if Token(**t).value == token_value]
+    if not token_in_list:
+        return None
+
+    # check token expiration
+    token = token_in_list.pop()
+    if token.expiration < int(datetime.now().timestamp()):
+        return None
+    
+    return list(_tokens.keys())[list(_tokens.values()).index(asdict(token))]
+
+
+def revoke_token(username: str) -> None:
+    if username in _tokens:
+        del _tokens[username]

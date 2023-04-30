@@ -13,7 +13,6 @@ def list(type: Type[M]) -> List[M]:
 
 def create(data: M) -> None:
     _db[data.__class__] = _db.get(data.__class__, []) + [asdict(data)]
-    print(_db[data.__class__])
 
 
 def delete(data: M) -> bool:

@@ -8,8 +8,8 @@ def validate_log_request(log: Log, user: User) -> bool:
     return user.username == log.username
 
 
-def list_logs(user: User) -> List[Log]:
-    return [l for l in db.list(Log) if l.username == user.username]
+def list_logs(username: str) -> List[Log]:
+    return [l for l in db.list(Log) if l.username == username]
 
 
 def create_log(log: Log) -> None:
@@ -20,6 +20,6 @@ def delete_log(log: Log) -> bool:
     return db.delete(log)
 
 
-def delete_user_logs(user: User) -> None:
-    for log in list_logs(user):
+def delete_user_logs(username: str) -> None:
+    for log in list_logs(username):
         db.delete(log)

@@ -15,12 +15,12 @@
     </form>
     
     <button disabled="{{ busy || !isSubmittable() }}" mat-stroked-button (click)="submit()">{{ currentTab }}</button>
-    <div>{{ message }}</div>
 </ng-template>
 
 <ng-template #loggedIn>
     <h1>Greetings, {{ getUsername() }}!</h1>
-    <button mat-stroked-button color="warn">Log-Out</button>
-    <button mat-stroked-button color="warn">Delete User</button>
+    <button mat-stroked-button color="warn" disabled="{{ busy }}" (click)="logout()">Log Out</button>
+    <button mat-stroked-button color="warn" disabled="{{ busy }}" (click)="delete()">Delete User</button>
 </ng-template>
-  
+
+<div>{{ message }}</div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User, Token } from '../models/models';
 import { ServerService } from './server.service';
-import { Observable } from 'rxjs';
+import { Observable, share } from 'rxjs';
 
 const USERS_URI: string = "/users"
 const AUTH_URI: string = "/auth"
@@ -38,5 +38,15 @@ export class UserService {
     this.user = undefined
     this.token = undefined
     this.loggedIn = false
+  }
+
+  delete$(): Observable<unknown> {
+    const delete_result = this.serverService.delete$(USERS_URI, undefined, this.token!)
+
+    delete_result.subscribe({
+      next: () => { this.logout() }
+    })
+
+    return delete_result
   }
 }
