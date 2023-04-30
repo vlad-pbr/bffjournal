@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, share, throwError } from 'rxjs';
 import { Token, Error } from '../models/models';
 
 const SERVER_ENDPOINT: string = "http://localhost:8000"
@@ -26,19 +26,19 @@ export class ServerService {
   get$<Type>(uri: string, token?: Token): Observable<Type> {
     return this.rewrite_errors$(this.http.get<Type>(
       this.format_url(uri),
-      { headers: this.format_headers(token) }))
+      { headers: this.format_headers(token) }).pipe(share()))
   }
 
   post$<Type>(uri: string, body: any, token?: Token): Observable<Type> {
     return this.rewrite_errors$(this.http.post<Type>(
       this.format_url(uri),
       body,
-      { headers: this.format_headers(token) }))
+      { headers: this.format_headers(token) }).pipe(share()))
   }
 
   delete$<Type>(uri: string, body: any, token?: Token): Observable<Type> {
     return this.rewrite_errors$(this.http.delete<Type>(
       this.format_url(uri),
-      { headers: this.format_headers(token), body: body }))
+      { headers: this.format_headers(token), body: body }).pipe(share()))
   }
 }
