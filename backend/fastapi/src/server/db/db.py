@@ -8,6 +8,7 @@ _db: Dict[Type[M], List[Dict]] = {}
 
 
 def list(type: Type[M]) -> List[M]:
+    print(_db.get(type, []))
     return [type(**item) for item in _db.get(type, [])]
 
 
@@ -23,6 +24,6 @@ def delete(data: M) -> bool:
     except ValueError:
         return False
 
-    _db[data.__class__] = db_data
+    _db[data.__class__] = [asdict(item) for item in db_data]
 
     return True
