@@ -21,6 +21,10 @@ export class LogService {
     return this.serverService.post$(LOGS_URI, log, this.userService.token!)
   }
 
+  delete$(log: Log): Observable<unknown> {
+    return this.serverService.delete$(LOGS_URI, log, this.userService.token!)
+  }
+
   update_logs$(): Observable<Log[]> {
     const logs_request = this.serverService.get$<Log[]>(LOGS_URI, this.userService.token!)
 

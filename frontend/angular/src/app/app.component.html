@@ -22,7 +22,7 @@
         </form>
         <ng-template [ngIf]="getLogs().length > 0" [ngIfElse]="noLogs">
             <div class="center-container-item" *ngFor="let log of getLogs()">
-                <app-log [log]="log"></app-log>
+                <app-log [log]="log" (delete)="deleteLog($event)"></app-log>
             </div>
         </ng-template>
         <ng-template #noLogs>

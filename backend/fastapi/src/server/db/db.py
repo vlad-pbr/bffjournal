@@ -8,7 +8,6 @@ _db: Dict[Type[M], List[Dict]] = {}
 
 
 def list(type: Type[M]) -> List[M]:
-    print(_db.get(type, []))
     return [type(**item) for item in _db.get(type, [])]
 
 

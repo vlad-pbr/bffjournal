@@ -63,6 +63,21 @@ export class AppComponent {
     })
   }
 
+  deleteLog(log: Log) {
+    this.busy = true
+
+    console.log(this)
+    this.logService.delete$(log).subscribe({
+      error: (e: Error) => { this.handleError(e) },
+      next: () => {
+        this.logService.update_logs$().subscribe({
+          error: (e: Error) => { this.handleError(e) },
+          next: () => { this.busy = false }
+        })
+      }
+    })
+  }
+
   openUserDialog(): void {
     this.busy = true
 
