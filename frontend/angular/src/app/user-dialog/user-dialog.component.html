@@ -1,26 +1,50 @@
 <ng-template [ngIf]="!isLoggedIn()" [ngIfElse]="loggedIn">
-    <mat-tab-group (selectedTabChange)="handleTabChange($event)" selectedIndex="0">
-        <mat-tab *ngFor="let tab of tabs" disabled="{{ busy }}" label="{{ tab }}">{{ tab }}</mat-tab>
+    <mat-tab-group backgroundColor="primary" (selectedTabChange)="handleTabChange($event)" selectedIndex="0">
+        <mat-tab *ngFor="let tab of tabs" disabled="{{ busy }}" label="{{ tab }}"></mat-tab>
     </mat-tab-group>
-      
+        
     <form [formGroup]="userForm">
-        <mat-form-field>
-            <mat-label>Username</mat-label>
-            <input readonly="{{ busy }}" matInput formControlName="username">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Password</mat-label>
-            <input readonly="{{ busy }}" matInput type="password" formControlName="password">
-        </mat-form-field>
+        <mat-grid-list cols="2" rowHeight="8vh">
+            <mat-grid-tile [colspan]="2" [rowspan]="1"></mat-grid-tile>
+            <mat-grid-tile [colspan]="2" [rowspan]="1">
+                <mat-form-field class="grid-item">
+                    <input class="grid-item" readonly="{{ busy }}" matInput formControlName="username" placeholder="Username">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="2" [rowspan]="1">
+                <mat-form-field class="grid-item">
+                    <input class="grid-item" readonly="{{ busy }}" matInput type="password" formControlName="password" placeholder="Password">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="2" [rowspan]="1">
+                <button class="grid-item" disabled="{{ busy || !isSubmittable() }}" mat-flat-button color="primary" (click)="submit()">{{ currentTab }}</button>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="2" [rowspan]="1">
+                <div>{{ message }}</div>
+            </mat-grid-tile>
+        </mat-grid-list>
     </form>
-    
-    <button disabled="{{ busy || !isSubmittable() }}" mat-stroked-button (click)="submit()">{{ currentTab }}</button>
 </ng-template>
 
 <ng-template #loggedIn>
-    <h1>Greetings, {{ getUsername() }}!</h1>
-    <button mat-stroked-button color="warn" disabled="{{ busy }}" (click)="logout()">Log Out</button>
-    <button mat-stroked-button color="warn" disabled="{{ busy }}" (click)="delete()">Delete User</button>
+    <mat-grid-list cols="2" rowHeight="8vh" gutterSize="2vh">
+        <mat-grid-tile [colspan]="2" [rowspan]="1"> </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <div>
+                <mat-icon class="icon-display">account_circle</mat-icon>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <h1 class="grid-item center-text">{{ getUsername() }}</h1>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <button class="grid-item" mat-stroked-button color="warn" disabled="{{ busy }}" (click)="logout()">Log Out</button>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <button class="grid-item" mat-flat-button color="warn" disabled="{{ busy }}" (click)="delete()">Delete User</button>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <div>{{ message }}</div>
+        </mat-grid-tile>
+    </mat-grid-list>
 </ng-template>
-
-<div>{{ message }}</div>

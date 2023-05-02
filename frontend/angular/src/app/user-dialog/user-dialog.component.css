@@ -1,0 +1,13 @@
+.grid-item {
+    width: 75%;
+    height: 100%;
+}
+
+.icon-display {
+    vertical-align: middle;
+    transform: scale(3);
+}
+
+.center-text {
+    text-align: center;
+}

@@ -81,7 +81,7 @@ export class AppComponent {
   openUserDialog(): void {
     this.busy = true
 
-    this.dialog.open(UserDialogComponent).afterClosed().subscribe({
+    this.dialog.open(UserDialogComponent, { width: "25%" }).afterClosed().subscribe({
       next: (successful_login: boolean) => {
         if (successful_login) {
           this.logService.update_logs$().subscribe({
