@@ -26,7 +26,6 @@ export class UserDialogComponent {
   tabs: Tab[] = [ Tab.LOGIN, Tab.REGISTER ]
   message: string = ""
   currentTab: Tab = this.tabs[0]
-  busy: boolean = false
 
   constructor(
     public dialogRef: MatDialogRef<UserDialogComponent>,
@@ -35,9 +34,7 @@ export class UserDialogComponent {
     private logService: LogService) {}
 
   onNoClick(): void {
-    if (!this.busy) {
-      this.dialogRef.close(false)
-    }
+    this.dialogRef.close(false)
   }
 
   handleTabChange(e: MatTabChangeEvent): void {
@@ -46,7 +43,6 @@ export class UserDialogComponent {
 
   handleError(e: Error) {
     this.message = e.detail
-    this.busy = false
   }
 
   isSubmittable(): boolean {
@@ -62,16 +58,12 @@ export class UserDialogComponent {
   }
 
   logout(): void {
-    this.busy = true
-
     this.userService.logout()
     this.logService.clear_logs()
     this.dialogRef.close(false)
   }
 
   delete(): void {
-    this.busy = true
-
     this.userService.delete$().subscribe({
       error: (e: Error) => this.handleError(e),
       next: () => { this.logout() }
@@ -81,7 +73,6 @@ export class UserDialogComponent {
   submit(): void {
 
     this.message = ""
-    this.busy = true
 
     const login = () => {
       this.userService.login$(this.userForm.value).subscribe({

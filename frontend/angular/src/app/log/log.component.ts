@@ -11,6 +11,8 @@ export class LogComponent {
   @Output() delete = new EventEmitter<Log>()
 
   formatDate(epoch_seconds: number): string {
-    return new Date(epoch_seconds * 1000).toString()
+    const date = new Date(epoch_seconds * 1000)
+
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
   }
 }

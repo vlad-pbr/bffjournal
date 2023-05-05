@@ -2,15 +2,12 @@
     <span>BFF Journal</span>
     <span class="toolbar-spacer"></span>
     <button mat-icon-button (click)="openUserDialog()">
-        <mat-icon>login</mat-icon>
+        <mat-icon>person</mat-icon>
     </button>
 </mat-toolbar>
 
 <div class="center-contaner">
-    <ng-template [ngIf]="!isLoggedIn()" [ngIfElse]="loggedIn">
-        <h1 class="center-container-item center-text">Log in to see your logs!</h1>
-    </ng-template>
-    <ng-template #loggedIn>
+    <ng-template [ngIf]="isLoggedIn()">
         <form [formGroup]="logForm" class="center-container-item">
             <mat-form-field class="full-width">
                 <mat-label>What's on your mind?</mat-label>
@@ -20,16 +17,12 @@
                 </button>
             </mat-form-field>
         </form>
-        <ng-template [ngIf]="getLogs().length > 0" [ngIfElse]="noLogs">
+        <ng-template [ngIf]="getLogs().length > 0">
             <div class="center-container-item" *ngFor="let log of getLogs()">
                 <app-log [log]="log" (delete)="deleteLog($event)"></app-log>
             </div>
         </ng-template>
-        <ng-template #noLogs>
-            <h1 class="center-container-item center-text">Write your first log!</h1>
-        </ng-template>
     </ng-template>
-
     <div><h2 class="center-container-item center-text error-text">{{ message }}</h2></div>
 </div>
   

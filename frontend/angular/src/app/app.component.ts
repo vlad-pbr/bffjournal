@@ -18,7 +18,6 @@ export class AppComponent {
   logForm: FormGroup = this.formBuilder.group({
     message: ''
   })
-  busy: boolean = false
   message: string = ""
 
   constructor(
@@ -42,12 +41,9 @@ export class AppComponent {
 
   handleError(e: Error) {
     this.message = e.detail
-    this.busy = false
   }
 
   createLog(): void {
-    this.busy = true
-
     this.logService.create$({
       username: this.userService.user!.username,
       date: Math.round(Date.now() / 1000),
@@ -56,40 +52,30 @@ export class AppComponent {
       error: (e: Error) => { this.handleError(e) },
       next: () => {
         this.logService.update_logs$().subscribe({
-          error: (e: Error) => { this.handleError(e) },
-          next: () => { this.busy = false }
+          error: (e: Error) => { this.handleError(e) }
         })
       }
     })
   }
 
   deleteLog(log: Log) {
-    this.busy = true
-
-    console.log(this)
     this.logService.delete$(log).subscribe({
       error: (e: Error) => { this.handleError(e) },
       next: () => {
         this.logService.update_logs$().subscribe({
-          error: (e: Error) => { this.handleError(e) },
-          next: () => { this.busy = false }
+          error: (e: Error) => { this.handleError(e) }
         })
       }
     })
   }
 
   openUserDialog(): void {
-    this.busy = true
-
     this.dialog.open(UserDialogComponent, { width: "25%" }).afterClosed().subscribe({
       next: (successful_login: boolean) => {
         if (successful_login) {
           this.logService.update_logs$().subscribe({
-            error: (e: Error) => { this.handleError(e) },
-            next: () => { this.busy = false }
+            error: (e: Error) => { this.handleError(e) }
           })
-        } else {
-          this.busy = false
         }
       }
     })
